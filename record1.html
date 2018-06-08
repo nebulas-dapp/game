@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>星云风云榜</title>
+<link href="./css/reset.css" rel="stylesheet">
+<script src="./js/xml.js"></script>
+<script type="text/javascript" src="./dist/nebulas.js"></script>
+
+<script type="text/javascript" src="./dist/nebPay.js"></script>
+
+<style>
+	    
+        body {
+    
+        background:url("./picture1.jpg") repeat-y;
+        background-size: 100%;
+        }
+        .opa {
+
+            opacity: 0.4;
+        }
+     
+        
+	.main{
+		width: 800px;
+		margin:20px auto;
+	}
+	h1{
+		font-weight:bold;
+	}
+	span{
+		display: inline-block;
+		width: 200px;
+		height: 25px;
+		line-height: 25px;
+		vertical-align: center;
+		text-align: left;
+		margin-bottom: 10px;
+	}
+	.tag{
+		font-size: 13px;
+		margin-left: 370px;
+		vertical-align: bottom;
+		text-align: center;
+		margin-bottom: 0;
+	}
+	.text{
+		width: 750px;
+		height: 180px;
+		margin:0 auto;
+
+		resize:none;
+	}
+	
+	input{
+		display: inline-block;
+		width: 80px;
+		height: 50px;
+		background: #E2526F;
+		border: 0;
+		margin-left: 670px;
+		margin-top: 10px;
+	}
+	.creatediv{
+		width: 675px;
+		height: 80px;
+		border: 1px solid gray;
+		position: relative;
+		margin-top: 10px;
+		padding-left: 75px;
+		word-wrap:break-word; 
+        word-break:break-all; 
+	}
+	.createinput{
+		width: 80px;
+		height: 30px;
+		position:absolute;
+		right: 5px;
+		bottom:5px;
+	}
+	.createimg{
+		width: 50px;
+		height: 50px;
+		position: absolute;
+		top: 15px;
+		left: 15px;
+	}
+	.createdivs{
+		width:600px;
+		height:50px;
+		position: absolute;
+		top: 15px;
+		left: 85px;
+	}
+</style>
+</head>
+
+<body id="body">
+    <div class="main">
+
+		<hr>
+		<hr>
+	    <h1>-----------用户----得分------------------------------------------------------------------------------------------</h1>
+    	<div id="txt" >
+    		
+
+    	</div>
+    </div>
+    <div style="text-align:center;">
+
+</div>
+<script>
+
+
+
+</script>		
+</body>
+<script>
+	
+    var dappContactAddress = "n1oryRd5wjyoqUxyqfpoCjF9tz2QqGizgrc";
+    var nebulas = require("nebulas"), Account = Account, neb = new nebulas.Neb();
+    neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"))
+
+
+    var NebPay = require("nebpay");     
+    var nebPay = new NebPay();
+    var serialNumber;
+
+	
+	var txt = document.getElementById('txt');
+	var textarea = document.getElementById("text");
+
+   
+	var from = dappContactAddress
+        var value = "0";
+        var nonce = "0"
+        var gas_price = "1000000"
+        var gas_limit = "2000000"
+        var callFunction = "getlength";
+        var callArgs = "[]";
+		var aaa;
+		var number=0;
+        console.log(callArgs);
+        var contract = {
+            "function": callFunction,
+            "args": callArgs
+        }
+
+
+
+
+		var nn=document.getElementById("n");
+		number=20;
+		console.log(number);
+    function get(){
+		console.log("111");
+		var callFunction = "get";
+        var callArgs = "[\"" + + "\"]";
+
+        var contract = {
+            "function": callFunction,
+            "args": callArgs
+        }
+		for(var i=0;i<number;i++){
+			console.log("222");
+			var callArgs = "[\""+i+"\"]";
+			var contract = {
+            "function": callFunction,
+            "args": callArgs
+			}
+			neb.api.call(from, dappContactAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+            var result = resp.result;
+            
+            result = JSON.parse(result);
+			var name=result.number;
+			var sc=result.score;
+			var account=result.from;
+			if(name.length>0 ){
+			var divs = document.createElement("div");
+			var imgs = document.createElement("img");
+			var ps = document.createElement("p");
+			
+			divs.setAttribute("class","creatediv");
+			imgs.setAttribute('class',"createimg");
+			ps.setAttribute("class","createdivs");
+			
+			imgs.src="pic/2.jpg";
+			console.log("333");	
+			
+			ps.innerHTML=name+"---"+sc+"---";
+			divs.appendChild(imgs);
+			divs.appendChild(ps);
+			
+			if(txt.children.length==0){
+				txt.appendChild(divs);
+
+			}else{
+				txt.insertBefore(divs,get_firstChild(txt))
+			}
+			
+		}
+        }).catch(function (err) {
+            console.log("error :" + err.message);
+
+        })
+
+		}
+
+
+
+	}
+	window.onload =get;
+
+
+
+
+</script>
+</html>
